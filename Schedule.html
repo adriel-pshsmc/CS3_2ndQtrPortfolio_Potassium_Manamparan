@@ -1,27 +1,51 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="schedule_sheet.css">
-</head>  
-    <body>
-        <div class="navbar">
-            <ul>
-                <li><a>Home</a></li>
-                <li><a>Monday</a></li>
-                <li><a>Tuesday</a></li>
-                <li><a>Wednesday</a></li>
-                <li><a>Thursday</a></li>
-                <li><a>Friday</a></li>
-            </ul>
-        </div>
-        <div class="content">
-            <br>
+<link href='Activity_Salitan2025.css' rel='stylesheet'>  
+<link href='/favicon.png' rel="icon">      
+<title>B2029 Sched</title>
+<meta charset="UTF-8">
+</head>
+<body>
+  <ul class="navbar">
+    <li>☰</li>
+    <li onclick="mon()">Monday</li>
+    <li onclick="tue()">Tuesday</li>
+    <li onclick="wed()">Wednesday</li>
+    <li onclick="thu()">Thursday</li>
+    <li onclick="fri()">Friday</li>
+    <li onclick="home()">Home</li>
+  </ul>
+  <section id="selected"><iframe class="content" src="Home_Salitan2025.html"></iframe></section>
+  <script>
+    function sidemenu() {
+      document.getElementById("sidemenu").innerHTML = '<iframe class="selection" src="SideMenu_Salitan2025.html">'
+    }
+    function mon() {
+      document.getElementById("selected").innerHTML = '<iframe class="content" src="MonSched_Salitan2025.html"></iframe>'
+    }
+    function tue() {
+      document.getElementById("selected").innerHTML = '<iframe class="content" src="TueSched_Salitan2025.html"></iframe>'
+    }
+    function wed() {
+      document.getElementById("selected").innerHTML = '<iframe class="content" src="WedSched_Salitan2025.html"></iframe>'
+    }
+    function thu() {
+      document.getElementById("selected").innerHTML = '<iframe class="content" src="ThuSched_Salitan2025.html"></iframe>'
+    }
+    function fri() {
+      document.getElementById("selected").innerHTML = '<iframe class="content" src="FriSched_Salitan2025.html"></iframe>'
+    }
+    function home() {
+      document.getElementById("selected").innerHTML = '<iframe class="content" src="Home_Salitan2025.html"></iframe>'
+    }
+  </script>
+</body>
+<footer>
+  <p>© Adriel Manamparan, 2025</p>
+  <a href="https://www.youtube.com">Adriel's Digital Garden</a><br>
+  <a href="https://www.youtube.com">Adriel's GitHub</a><br>
+  <pre><a href="https://www.youtube.com">Adriel's Facebook    </a><a href="https://www.youtube.com">Adriel's Instagram</a></pre>
 
-            <table>
-                <tr>
-                    <td>07:20 </td>
-                </tr>
-            </table>
-        </div>
-    </body>
+</footer>
 </html>

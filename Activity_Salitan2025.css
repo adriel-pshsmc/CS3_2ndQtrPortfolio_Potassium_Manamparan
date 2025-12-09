@@ -1,0 +1,50 @@
+.navbar {
+    display: block;
+    width: 100%;
+    height: 10%;
+    display: flex;
+    position: fixed;
+    top: 0;
+    background-color: black;
+    border: 0px 0px;
+    margin: 0px 0px;
+    align-items: center;
+    left: 0;
+    right: 0;
+    bottom: 10%;
+    list-style: none;
+}
+li {
+    font-size: 100%;
+    text-decoration: none;
+    color: white;
+    padding: 20px 10px
+}
+li:hover{
+    background-color: grey;
+    opacity: 50%
+}
+.content {
+    width: 100%;
+    height: 90vh;
+    top: 10vh;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 20px;
+    border: 0;
+}
+body {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.25)), url('/background-salitan.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-size: 100% 100%;
+    height: 100%;
+    width: 100%;
+    background-attachment: fixed;
+    margin: 0;
+}
+footer {
+    background-color: white;
+    text-align: center;
+    color: black;
+    padding: 1vh;
+}
