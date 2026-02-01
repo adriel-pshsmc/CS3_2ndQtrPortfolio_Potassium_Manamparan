@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>HTML Forms</title>
+    <link rel="stylesheet" href="3Q_2G_Manamparan.css">
+    <link rel="script" href="3Q_2G_Manamparan.js">
+</head>
+<body>
+    <form method="post" action="submit">
+        <p>1. Student Identification Number:</p>
+        <input type="text" id="studentId" placeholder="00000000" required> <br>
+
+        <p>2. Government Name:</p>
+        <input type="text" id="name" placeholder="Last, First, M.I." required> <br>
+
+        <p>3. Birthdate:</p>
+        <input type="datetime-local" id="birthdate" placeholder="YYYY-MM-DD hr:min" min="1911-01-18 00:00" required> <br>
+
+        <p>4. Email Address:</p>
+        <input type="text" id="email" placeholder="address@email.com" required> <br>
+
+        <p>5. Mobile Phone Number:</p>
+        <input type="text" id="number" placeholder="(+63) 999 9999 999" required> <br>
+
+        <p>6. Present Grade Level:</p>
+        <select id="grade" required>
+            <option value="grade7">Grade 7</option>
+            <option value="grade8">Grade 8</option>
+            <option value="grade9" selected>Grade 9</option>
+            <option value="grade10">Grade 10</option>
+            <option value="grade11">Grade 11</option>
+            <option value="grade12">Grade 12</option>
+        </select>
+
+        <p>7. Intern or Extern:</p>
+        <input type="radio" id="residence" name="residence" value="Intern" required>  <label>Intern</label><br>
+        <input type="radio" id="residence" name="residence" value="Extern" required>  <label>Extern</label> <br>
+
+        <p>8. Preferred Organization:</p>
+        <select id="org" required>
+            <option value="MTP">Mathematics Training Program</option>
+            <option value="Trophy">Trophy</option>
+            <option value="Reboot" selected>Reboot Computer Programming / Artificial Intelligence</option>
+            <option value="PAHAM">PAHAM</option>
+            <option value="ChemTeam">Chemistry Team</option>
+            <option value="BioTeam">Biology Team</option>
+        </select>
+
+        <p>9. Why do you want to join?:</p>
+        <textarea id="reason" name="reason" size="500" rows="10" cols="50"> Let's go, Reboot!
+        </textarea> <br><br>
+
+        <input type="submit" value="Submit">
+        <input type="reset" value="Reset">
+    </form>
+</body>
