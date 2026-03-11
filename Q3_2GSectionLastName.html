@@ -64,9 +64,14 @@
 		}
 		var fields = form.querySelectorAll('[name]');
 		var resultElement = document.getElementById('result');
+		var storageAvailable = (typeof Storage !== 'undefined');
+		if (!storageAvailable) {
+			if (resultElement) resultElement.innerHTML = 'localStorage not supported in this browser';
+		}
 
 		for (var i = 0; i < fields.length; i++) {
-			var element = fields[i], key = element.name, value = localStorage.getItem(key);
+			var element = fields[i], key = element.name, value = null;
+			if (storageAvailable) value = localStorage.getItem(key);
 			if (value === null){continue;}
 			if (element.type === 'radio'){
 				if (element.value === value){element.checked = true;}
@@ -78,6 +83,7 @@
 		for (var i = 0; i < fields.length; i++) {
 			(function(element){
 				function saveIt() {
+					if (!storageAvailable) return;
 					var j = element.name;
 					if (element.type === 'checkbox') localStorage.setItem(j, element.checked ? '1' : '0');
 					else if (element.type === 'radio') {
@@ -87,6 +93,7 @@
 					if (resultElement) resultElement.innerHTML = 'Saved locally';
 				}
 				element.addEventListener('input', saveIt);
+				element.addEventListener('blur', saveIt);
 				element.addEventListener('change', saveIt);
 			})(fields[i]);
 		}
