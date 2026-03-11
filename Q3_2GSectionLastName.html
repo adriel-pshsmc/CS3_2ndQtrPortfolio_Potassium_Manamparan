@@ -1,56 +1,114 @@
 <!DOCTYPE html>
 <head>
-    <meta charset="UTF-8">
-    <title>HTML Forms</title>
-    <link rel="stylesheet" href="3Q_2G_Manamparan.css">
-    <link rel="script" href="3Q_2G_Manamparan.js">
+	<meta charset="UTF-8">
+	<title>HTML Forms</title>
 </head>
 <body>
-    <form method="post" action="submit">
-        <p>1. Student Identification Number:</p>
-        <input type="text" id="studentId" placeholder="00000000" required> <br>
+	<form method="post">
+		<p>1. Student Identification Number:</p>
+		<input type="text" id="studentId" name="studentId" placeholder="00000000" required> <br>
 
-        <p>2. Government Name:</p>
-        <input type="text" id="name" placeholder="Last, First, M.I." required> <br>
+		<p>2. Government Name:</p>
+		<input type="text" id="name" name="name" placeholder="Last, First, M.I." required> <br>
 
-        <p>3. Birthdate:</p>
-        <input type="datetime-local" id="birthdate" placeholder="YYYY-MM-DD hr:min" min="1911-01-18 00:00" required> <br>
+		<p>3. Birthdate:</p>
+		<input type="datetime-local" id="birthdate" name="birthdate" placeholder="YYYY-MM-DD hr:min" min="1911-01-18T00:00" required> <br>
 
-        <p>4. Email Address:</p>
-        <input type="text" id="email" placeholder="address@email.com" required> <br>
+		<p>4. Email Address:</p>
+		<input type="text" id="email" name="email" placeholder="address@email.com" required> <br>
 
-        <p>5. Mobile Phone Number:</p>
-        <input type="text" id="number" placeholder="(+63) 999 9999 999" required> <br>
+		<p>5. Mobile Phone Number:</p>
+		<input type="text" id="number" name="number" placeholder="(+63) 999 9999 999" required> <br>
 
-        <p>6. Present Grade Level:</p>
-        <select id="grade" required>
-            <option value="grade7">Grade 7</option>
-            <option value="grade8">Grade 8</option>
-            <option value="grade9" selected>Grade 9</option>
-            <option value="grade10">Grade 10</option>
-            <option value="grade11">Grade 11</option>
-            <option value="grade12">Grade 12</option>
-        </select>
+		<p>6. Present Grade Level:</p>
+		<select id="grade" name="grade" required>
+			<option value="grade7">Grade 7</option>
+			<option value="grade8">Grade 8</option>
+			<option value="grade9" selected>Grade 9</option>
+			<option value="grade10">Grade 10</option>
+			<option value="grade11">Grade 11</option>
+			<option value="grade12">Grade 12</option>
+		</select>
 
-        <p>7. Intern or Extern:</p>
-        <input type="radio" id="residence" name="residence" value="Intern" required>  <label>Intern</label><br>
-        <input type="radio" id="residence" name="residence" value="Extern" required>  <label>Extern</label> <br>
+		<p>7. Intern or Extern:</p>
+		<input type="radio" id="residenceIntern" name="residence" value="Intern" required> <label for="residenceIntern">Intern</label><br>
+		<input type="radio" id="residenceExtern" name="residence" value="Extern" required> <label for="residenceExtern">Extern</label> <br>
 
-        <p>8. Preferred Organization:</p>
-        <select id="org" required>
-            <option value="MTP">Mathematics Training Program</option>
-            <option value="Trophy">Trophy</option>
-            <option value="Reboot" selected>Reboot Computer Programming / Artificial Intelligence</option>
-            <option value="PAHAM">PAHAM</option>
-            <option value="ChemTeam">Chemistry Team</option>
-            <option value="BioTeam">Biology Team</option>
-        </select>
+		<p>8. Preferred Organization:</p>
+		<select id="org" name="org" required>
+			<option value="MTP">Mathematics Training Program</option>
+			<option value="Trophy">Trophy</option>
+			<option value="Reboot" selected>Reboot Computer Programming / Artificial Intelligence</option>
+			<option value="PAHAM">PAHAM</option>
+			<option value="ChemTeam">Chemistry Team</option>
+			<option value="BioTeam">Biology Team</option>
+		</select>
 
-        <p>9. Why do you want to join?:</p>
-        <textarea id="reason" name="reason" size="500" rows="10" cols="50"> Let's go, Reboot!
-        </textarea> <br><br>
+		<p>9. Why do you want to join?:</p>
+		<textarea id="reason" name="reason" size="500" rows="10" cols="50"> Let's go, Reboot!
+		</textarea> <br><br>
 
-        <input type="submit" value="Submit">
-        <input type="reset" value="Reset">
-    </form>
+	<br>
+	<input type="submit" value="Submit">
+	<input type="reset" value="Reset">
+	</form>
+	<div id="result"></div>
+	<script>
+		var form = document.querySelector('form');
+		if (!form) {
+			var resultElement = document.getElementById('result');
+			if (resultElement) {
+				resultElement.innerHTML = 'No form found';
+			}
+			return;
+		}
+		var fields = form.querySelectorAll('[name]');
+		var resultElement = document.getElementById('result');
+
+		for (var i = 0; i < fields.length; i++) {
+			var element = fields[i], key = element.name, value = localStorage.getItem(key);
+			if (value === null){continue;}
+			if (element.type === 'radio'){
+				if (element.value === value){element.checked = true;}
+			}
+			else if (element.type === 'checkbox'){element.checked = (value === '1');}
+			else {element.value = value;}
+		}
+
+		for (var i = 0; i < fields.length; i++) {
+			(function(element){
+				function saveIt() {
+					var j = element.name;
+					if (element.type === 'checkbox') localStorage.setItem(j, element.checked ? '1' : '0');
+					else if (element.type === 'radio') {
+						if (element.checked){localStorage.setItem(j, element.value);}
+					}
+					else localStorage.setItem(j, element.value);
+					if (resultElement) resultElement.innerHTML = 'Saved locally';
+				}
+				element.addEventListener('input', saveIt);
+				element.addEventListener('change', saveIt);
+			})(fields[i]);
+		}
+		form.addEventListener('reset', function() {
+			setTimeout(function() {
+				if (window.localStorage) {
+					for (var i = 0; i < fields.length; i++) {
+						localStorage.removeItem(fields[i].name);
+					}
+				}
+				if (resultElement) resultElement.innerHTML = 'Cleared';
+				if (fields.length) fields[0].focus();
+			}, 0);
+		});
+		form.addEventListener('submit', function(event) {
+			event.preventDefault();
+			if (window.localStorage) {
+				for (var i = 0; i < fields.length; i++) {
+					localStorage.removeItem(fields[i].name);
+				}
+			}
+			if (resultElement) resultElement.innerHTML = 'Submitted';
+		});
+	</script>
 </body>
