@@ -4,7 +4,7 @@
 	<title>HTML Forms</title>
 </head>
 <body>
-	<form method="post">
+	<form>
 		<p>1. Student Identification Number:</p>
 		<input type="text" id="studentId" name="studentId" placeholder="00000000" required> <br>
 
@@ -49,7 +49,7 @@
 		</textarea> <br><br>
 
 	<br>
-	<input type="submit" value="Submit">
+	<button type="button" id="localSubmit">Submit</button>
 	<input type="reset" value="Reset">
 	</form>
 	<div id="result"></div>
@@ -60,18 +60,41 @@
 			if (resultElement) {
 				resultElement.innerHTML = 'No form found';
 			}
-			return;
 		}
 		var fields = form.querySelectorAll('[name]');
 		var resultElement = document.getElementById('result');
 		var storageAvailable = (typeof Storage !== 'undefined');
+		function tryGet(key) {
+			if (!storageAvailable) return null;
+			try {
+				return localStorage.getItem(key);
+			} catch (err) {
+				storageAvailable = false;
+				if (resultElement) resultElement.innerText = 'localStorage read error: ' + err.message;
+				console.error('localStorage.getItem error', err);
+				return null;
+			}
+		}
+		function trySet(key, value) {
+			if (!storageAvailable) return false;
+			try {
+				localStorage.setItem(key, value);
+				return true;
+			} catch (err) {
+				storageAvailable = false;
+				if (resultElement) resultElement.innerText = 'localStorage write error: ' + err.message;
+				console.error('localStorage.setItem error', err);
+				return false;
+			}
+		}
 		if (!storageAvailable) {
 			if (resultElement) resultElement.innerHTML = 'localStorage not supported in this browser';
 		}
 
 		for (var i = 0; i < fields.length; i++) {
 			var element = fields[i], key = element.name, value = null;
-			if (storageAvailable) value = localStorage.getItem(key);
+			value = tryGet(key);
+			console.log('restore attempt', key, value);
 			if (value === null){continue;}
 			if (element.type === 'radio'){
 				if (element.value === value){element.checked = true;}
@@ -85,12 +108,16 @@
 				function saveIt() {
 					if (!storageAvailable) return;
 					var j = element.name;
-					if (element.type === 'checkbox') localStorage.setItem(j, element.checked ? '1' : '0');
+					var ok = true;
+					if (element.type === 'checkbox') ok = trySet(j, element.checked ? '1' : '0');
 					else if (element.type === 'radio') {
-						if (element.checked){localStorage.setItem(j, element.value);}
+						if (element.checked) ok = trySet(j, element.value);
 					}
-					else localStorage.setItem(j, element.value);
-					if (resultElement) resultElement.innerHTML = 'Saved locally';
+					else ok = trySet(j, element.value);
+					console.log('save attempt', j, element.type === 'checkbox' ? (element.checked ? '1' : '0') : element.value, ok);
+					if (ok) {
+						if (resultElement) resultElement.innerHTML = 'Saved locally: ' + j;
+					}
 				}
 				element.addEventListener('input', saveIt);
 				element.addEventListener('blur', saveIt);
@@ -108,14 +135,19 @@
 				if (fields.length) fields[0].focus();
 			}, 0);
 		});
-		form.addEventListener('submit', function(event) {
-			event.preventDefault();
-			if (window.localStorage) {
-				for (var i = 0; i < fields.length; i++) {
-					localStorage.removeItem(fields[i].name);
+		var submitBtn = document.getElementById('localSubmit');
+		if (submitBtn) {
+			submitBtn.addEventListener('click', function() {
+				if (storageAvailable) {
+					for (var i = 0; i < fields.length; i++) {
+						localStorage.removeItem(fields[i].name);
+					}
 				}
-			}
-			if (resultElement) resultElement.innerHTML = 'Submitted';
-		});
+				if (resultElement) resultElement.innerHTML = 'Submitted';
+				// disable briefly to prevent accidental double-clicks
+				submitBtn.disabled = true;
+				setTimeout(function() { submitBtn.disabled = false; }, 1200);
+			});
+		}
 	</script>
 </body>
