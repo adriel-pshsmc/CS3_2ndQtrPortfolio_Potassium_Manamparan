@@ -6,6 +6,18 @@
 <body>
     <p ><a href="Q3_2GSectionLastName.html">Return to sign-ups</a></p>
     <h1>List of Sign-ups</h1>
+    <p>
+        Filter by organization:
+        <select id="orgFilter">
+            <option value="all">All</option>
+            <option value="MTP">Mathematics Training Program</option>
+            <option value="Trophy">Trophy</option>
+            <option value="Reboot">Reboot Computer Programming / Artificial Intelligence</option>
+            <option value="PAHAM">PAHAM</option>
+            <option value="ChemTeam">Chemistry Team</option>
+            <option value="BioTeam">Biology Team</option>
+        </select>
+    </p>
     <p>Total Number of Sign-ups: <a name="totalSignUps"></a></p>
     <table style="border: 1px solid black;">
         <thead>
@@ -40,13 +52,16 @@
                     arr.push(parsed);
                 } catch(e) {}
             }
-            total.textContent = arr.length;
+            var filterElement = document.getElementById('orgFilter');
+            var selected = filterElement ? filterElement.value : 'all';
+            var filtered = (selected === 'all') ? arr : arr.filter(function(item){ return item && item.org === selected; });
+            total.textContent = filtered.length;
             var body = document.getElementById('signupsBody');
             if (!body) return;
             body.innerHTML = '';
             var fields = ['studentId','name','birthdate','email','number','grade','residence','org','reason'];
-            for (var j = 0; j < arr.length; j++){
-                var item = arr[j];
+            for (var j = 0; j < filtered.length; j++){
+                var item = filtered[j];
                 var tr = document.createElement('tr');
                 for (var k = 0; k < fields.length; k++){
                     var td = document.createElement('td');
@@ -60,6 +75,8 @@
         updateCount();
         window.addEventListener('storage', updateCount);
         setInterval(updateCount, 1500);
+        var filterElement = document.getElementById('orgFilter');
+        if (filterElement) filterElement.addEventListener('change', updateCount);
     })();
     </script>
     </body>
