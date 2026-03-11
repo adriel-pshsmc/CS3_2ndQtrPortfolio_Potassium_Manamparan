@@ -4,6 +4,7 @@
 	<title>HTML Forms</title>
 </head>
 <body>
+	<p><a href="Q3_2GSectionLastNameTable.html">View list of sign-ups</a></p>
 	<form>
 		<p>1. Student Identification Number:</p>
 		<input type="text" id="studentId" name="studentId" placeholder="00000000" required> <br>
@@ -138,15 +139,27 @@
 		var submitBtn = document.getElementById('localSubmit');
 		if (submitBtn) {
 			submitBtn.addEventListener('click', function() {
-				if (storageAvailable) {
-					for (var i = 0; i < fields.length; i++) {
-						localStorage.removeItem(fields[i].name);
+				var entry = {};
+				for (var i = 0; i < fields.length; i++) {
+					var el = fields[i];
+					if (!el.name) continue;
+					if (el.type === 'radio') {
+						if (el.checked) entry[el.name] = el.value;
+					} else if (el.type === 'checkbox') {
+						entry[el.name] = el.checked ? true : false;
+					} else {
+						entry[el.name] = el.value;
 					}
 				}
-				if (resultElement) resultElement.innerHTML = 'Submitted';
-				// disable briefly to prevent accidental double-clicks
+				var key = 'signup:' + Date.now();
+				var ok = trySet(key, JSON.stringify(entry));
+				if (ok) {
+					if (resultElement) resultElement.textContent = 'Saved entry: ' + key;
+				} else {
+					if (resultElement) resultElement.textContent = 'Save failed';
+				}
 				submitBtn.disabled = true;
-				setTimeout(function() { submitBtn.disabled = false; }, 1200);
+				setTimeout(function(){ submitBtn.disabled = false; }, 1000);
 			});
 		}
 	</script>

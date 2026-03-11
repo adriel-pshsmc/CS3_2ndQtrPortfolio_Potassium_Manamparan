@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>List of Sign-ups</title>
+</head>
+<body>
+    <p ><a href="Q3_2GSectionLastName.html">Return to sign-ups</a></p>
+    <h1>List of Sign-ups</h1>
+    <p>Total Number of Sign-ups: <a name="totalSignUps"></a></p>
+    <table style="border: 1px solid black;">
+        <thead>
+        <tr style = "background-color: rgb(5, 5, 71); color: white">
+            <th>Student ID</th>
+            <th>Name</th>
+            <th>Birthdate</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Grade Level</th>
+            <th>Residence</th>
+            <th>Preferred Organization</th>
+            <th>Reason for Joining</th>
+        </tr>
+        </thead>
+        <tbody id="signupsBody"></tbody>
+    </table>
+
+    <script>
+    (function(){
+        var total = document.querySelector('a[name="totalSignUps"]');
+        if (!total) return;
+        function updateCount(){
+            var arr = [];
+            for (var i = 0; i < localStorage.length; i++){
+                try{
+                    var key = localStorage.key(i);
+                    if (!key || key.indexOf('signup:') !== 0) continue;
+                    var value = localStorage.getItem(key);
+                    if (!value) continue;
+                    var parsed = JSON.parse(value);
+                    arr.push(parsed);
+                } catch(e) {}
+            }
+            total.textContent = arr.length;
+            var body = document.getElementById('signupsBody');
+            if (!body) return;
+            body.innerHTML = '';
+            var fields = ['studentId','name','birthdate','email','number','grade','residence','org','reason'];
+            for (var j = 0; j < arr.length; j++){
+                var item = arr[j];
+                var tr = document.createElement('tr');
+                for (var k = 0; k < fields.length; k++){
+                    var td = document.createElement('td');
+                    var v = item[fields[k]];
+                    td.textContent = (v === undefined || v === null) ? '' : v;
+                    tr.appendChild(td);
+                }
+                body.appendChild(tr);
+            }
+        }
+        updateCount();
+        window.addEventListener('storage', updateCount);
+        setInterval(updateCount, 1500);
+    })();
+    </script>
+    </body>
